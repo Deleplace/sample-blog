@@ -1,7 +1,9 @@
 package blog
 
 import (
+	"embed"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -19,6 +21,14 @@ func NewServer() *Server {
 	return s
 }
 
+//go:embed static
+var static embed.FS
+
+//go:embed templates/*.tmpl
+var tpls embed.FS
+
+var t = template.Must(template.ParseFS(tpls, "templates/*.tmpl"))
+
 func (s *Server) Start() error {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -31,10 +41,18 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) initRoutes() {
+	// Serve static resources (CSS, etc.)
+	http.Handle("/static/", http.FileServer(http.FS(static)))
+	// Serve dynamic, server-side rendered pages
 	http.HandleFunc("/", s.index)
 }
 
 func (s *Server) index(w http.ResponseWriter, r *http.Request) {
-	log.Println("Serving request")
-	fmt.Fprintln(w, "Hello from Server")
+	// TODO: pass dynamic data to the template
+	var data struct{}
+
+	err := t.ExecuteTemplate(w, "index.tmpl", data)
+	if err != nil {
+		log.Println("executing index.tmpl:", err)
+	}
 }
