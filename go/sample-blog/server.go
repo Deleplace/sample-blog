@@ -39,8 +39,9 @@ func (s *Server) Start() error {
 		log.Printf("Defaulting to port %s", port)
 	}
 
-	log.Printf("Listening on port %s", port)
-	return http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	addr := os.Getenv("ADDR") + ":" + port
+	log.Printf("Listening on %s\n", addr)
+	return http.ListenAndServe(addr, nil)
 }
 
 func (s *Server) initRoutes() {
