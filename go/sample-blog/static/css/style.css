@@ -132,3 +132,11 @@ input[type=submit] {
   align-self: start;
   min-width: 10em;
 }
+
+img.embed-illustration {
+  margin: 1rem;
+  margin-left: 30%;
+  max-width: 40%;
+  border-radius: 1rem;
+  border: 3px solid #333;
+}
