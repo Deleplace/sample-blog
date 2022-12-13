@@ -1,13 +1,27 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	blog "github.com/Deleplace/sample-blog/go/sample-blog"
 )
 
 func main() {
-	s := blog.NewServer()
-	err := s.Start()
+
+	if len(os.Args) < 2 {
+		fmt.Fprintln(os.Stderr, "Please provide the SQLite file as argument")
+		os.Exit(1)
+	}
+	dbFilepath := os.Args[1]
+
+	s, err := blog.NewServer(dbFilepath)
+	if err != nil {
+		log.Fatalln("Creating server:", err)
+	}
+	err = s.Start()
 	log.Fatal(err)
 }
