@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	blog "github.com/Deleplace/sample-blog"
+	blog "github.com/Deleplace/sample-blog/go/sample-blog"
 )
 
 func main() {
