@@ -24,7 +24,6 @@ func (s *Server) initDB(dbpath string) error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	// This always creates new tables from scratch
 	log.Println("Creating DB tables...")
