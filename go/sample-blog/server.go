@@ -1,6 +1,7 @@
 package blog
 
 import (
+	"database/sql"
 	"embed"
 	"html/template"
 	"log"
@@ -9,15 +10,17 @@ import (
 )
 
 type Server struct {
-	// TODO: config, state
+	db *sql.DB
 }
 
-func NewServer() *Server {
-	s := &Server{
-		// TODO: initialization
+func NewServer(dbpath string) (*Server, error) {
+	s := &Server{}
+	err := s.initDB(dbpath)
+	if err != nil {
+		return nil, err
 	}
 	s.initRoutes()
-	return s
+	return s, nil
 }
 
 //go:embed static
