@@ -3,6 +3,7 @@ package blog
 import (
 	"database/sql"
 	"embed"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -50,10 +51,21 @@ func (s *Server) initRoutes() {
 }
 
 func (s *Server) index(w http.ResponseWriter, r *http.Request) {
-	// TODO: pass dynamic data to the template
-	var data struct{}
+	ctx := r.Context()
+	posts, err := s.posts(ctx)
+	if err != nil {
+		log.Println("Reading posts in DB:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, "Error reading posts from the database")
+		return
+	}
+	data := struct {
+		Posts []Post
+	}{
+		Posts: posts,
+	}
 
-	err := t.ExecuteTemplate(w, "index.tmpl", data)
+	err = t.ExecuteTemplate(w, "index.tmpl", data)
 	if err != nil {
 		log.Println("executing index.tmpl:", err)
 	}

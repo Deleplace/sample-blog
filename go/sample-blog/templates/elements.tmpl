@@ -1,0 +1,18 @@
+{{define "posts"}}
+  {{range .}}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{.Title}}</h1>
+          <div class="about">by {{.Author}} on {{.Created}}</div>
+        </div>
+      </header>
+      <p class="body">{{.Body}}</p>
+    </article>
+  {{end}}
+{{end}}
+
+{{define "decoration"}}
+    <h3>Nice decorative painting</h3>
+    <img class="embed-illustration" src="/static/img/The_Death_of_Socrates_by_Jacques-Louis_David.jpg" />
+{{end}}
